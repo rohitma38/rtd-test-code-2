@@ -2,7 +2,7 @@ matplotlib
 pandas
 numpy
 scipy
-librosa
+librosa==0.8
 seaborn
 praat-parselmouth
 soundfile
