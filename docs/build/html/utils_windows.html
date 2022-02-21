@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="y" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>utils_windows module &mdash; rtd-test 1 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> rtd-test
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="intro.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="start.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="modules.html">API Documentation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">rtd-test</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>utils_windows module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/utils_windows.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-utils_windows">
+<span id="utils-windows-module"></span><h1>utils_windows module<a class="headerlink" href="#module-utils_windows" title="Permalink to this headline"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.drawAnnotation">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">drawAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cyclePath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetTimeKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inst'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetLabelKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">c</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'purple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.drawAnnotation" title="Permalink to this definition"></a></dt>
+<dd><p>Draws annotations on ax</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>cyclePath (str): path to the cycle annotation file
+onsetPath (str): path to onset annotations; only considered if cyclePath is None
+onsetKeyword (str): column name in the onset file to take onsets from
+onsetLabelKeyword (str): column name with labels for the onsets; if None, no label will be printed
+numDiv (int): number of equally spaced divisions to add between pairs of annotations (numDiv - 1 timestamps will be added between each pair)
+startTime (float): start time of audio being analysed
+duration (float): duration of the audio to be analysed
+ax (plt.Axes.axis): axis to plot in
+annotLabel (bool): if True, will print annotation label along with line
+c (str or list): list of colour to plot lines in, one for each onsetTimeKeyword (if provided)
+alpha (float): controls opacity of the annotation lines drawn</p>
+</dd>
+<dt>Returns</dt><dd><p>ax (plt.Axes.axis): axis that has been plotted in</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.drawWave">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">drawWave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqXlabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclePath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cAnnot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'purple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.drawWave" title="Permalink to this definition"></a></dt>
+<dd><p>Plots the wave plot of the audio</p>
+<p>audio: loaded audio time series
+sr: sample rate that audio time series is loaded/ is to be loaded in
+audioPath: path to the audio file
+startTime: time to start reading the audio at
+duration: duration of audio to load
+ax: axis to plot waveplot in
+xticks: if True, will plot xticklabels
+freqXlabels: time (in seconds) after which each x label occurs
+annotate: if True, will annotate tala markings
+cyclePath: path to file with tala cycle annotations
+numDiv: number of divisions to put between each annotation marking
+onsetPath: path to file with onset annotations; only considered if cyclePath is None
+cAnnot: colour for the annotation marking
+annotLabel: if True, will print annotation label along with line; used only if annotate is True; used only if annotate is True</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.generateFig">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">generateFig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">noRows</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(14,</span> <span class="pre">7)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">heightRatios</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.generateFig" title="Permalink to this definition"></a></dt>
+<dd><p>Generates a matplotlib.pyplot.figure and axes to plot in</p>
+<p>Axes in the plot are stacked vertically in one column, with height of each axis determined by heightRatios</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>noRows: number of rows in the figure
+figSize: (width, height) in inches  of the figure
+heightRatios: list of the fraction of height that each axis should take; len(heightRatios) has to be equal to noRows</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>figure object
+axs: list of axes objects</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>fig</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.pitchCountour">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">pitchCountour</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">minPitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">98</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxPitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">660</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tonic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">220</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeStep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">octaveJumpCost</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">veryAccurate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqXlabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclePath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetTimeKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inst'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetLabelKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cAnnot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'purple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotAlpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.pitchCountour" title="Permalink to this definition"></a></dt>
+<dd><p>Returns pitch contour for the audio</p>
+<p>Uses <cite>plotPitch</cite> to plot pitch contour.</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>audio: loaded audio time series
+sr: sample rate of audio time series/ to load the audio at
+audioPath: path to audio file; only needed if audio is None
+startTime: time to start reading audio file
+duration: duration of the audio file to read
+minPitch: minimum pitch to read for contour extraction
+maxPitch: maximum pitch to read for contour extraction
+notes: list of note objects indicating notes present in the raga
+tonic: tonic of the audio
+timeStep: time steps in which audio is extracted
+octaveJumpCost: parameter passed to pitch detection function
+veryAccurate: parameter passed to pitch detection function
+ax: axis to plot the pitch contour in
+freqXlabels: time (in seconds) after which each x label occurs
+annotate: if True, will annotate tala markings
+cyclePath: path to file with tala cycle annotations
+numDiv: number of divisions to put between each annotation marking
+onsetPath: path to file with onset annotations; only considered if cyclePath is None
+onsetTimeKeyword (str): column name in the onset file to take onsets from
+onsetLabelKeyword (str): column name with labels for the onsets; if None, no label will be printed
+xticks: if True, will plot xticklabels
+yticks: if True, will plot yticklabels
+annotLabel: if True, will print annotation label along with line; used only if annotate is True; used only if annotate is True
+cAnnot: color of the annotation
+ylim: (min, max) limits for the y axis; if None, will be directly interpreted from the data
+annotAlpha: controls opacity of the annotation lines</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot of pitch contour if ax was not None</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>ax</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.playAudio">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">playAudio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.playAudio" title="Permalink to this definition"></a></dt>
+<dd><p>Plays relevant part of audio</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>audio: loaded audio sample
+sr: sample rate of audio
+audioPath: path to audio file
+startTime: time to start reading audio at
+duration: duration of the audio to load</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>iPython.display.Audio object that plays the audio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.playAudioWClicks">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">playAudioWClicks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetFile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetLabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Inst',</span> <span class="pre">'Tabla']</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.playAudioWClicks" title="Permalink to this definition"></a></dt>
+<dd><p>Plays relevant part of audio along with clicks at timestamps in onsetTimes</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>audio (np.array): loaded audio sample
+sr (float): sample rate of audio
+audioPath (str): path to audio file
+startTime (float): time to start reading audio at
+duration (float): duration of the audio to load
+onsetFile (str): file path to onset values
+onsetLabels (str): column names in onsetFile to mark with clicks
+destPath (str): path to save audio file at; if None, will not save any audio file</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>iPython.display.Audio object that plays the audio</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.playVideo">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">playVideo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">video</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">videoPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">destPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Data/Temp/VideoPart.mp4'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">videoOffset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.playVideo" title="Permalink to this definition"></a></dt>
+<dd><p>Plays relevant part of audio</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>video (np.ndarray): loaded video sample
+videoPath (str): path to video file
+startTime (float): time to start reading the video from
+duration (float): duration of the video to load
+destPath (str): path to store shortened video
+videoOffset (float): number of seconds offset between video and audio; time in audio + videioOffset = time in video</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>iPython.display.Video object that plays the video</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.plotPitch">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">plotPitch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pitch</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">notes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tonic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqXlabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclePath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetTimeKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inst'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetLabelKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cAnnot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'purple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylim</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotAlpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.plotPitch" title="Permalink to this definition"></a></dt>
+<dd><p>Converts the pitch contour from Hz to Cents, and plots it</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>pitch: pitch object from <cite>pitchCountour</cite>
+notes: object for each note used for labelling y-axis
+ax: axis object on which plot is to be plotted
+tonic: tonic (in Hz) of audio clip
+startTime: start time for x labels in the plot
+duration: duration of audio in the plot (used for x labels)
+freqXlabels: time (in seconds) after which each x label occurs
+annotate: if true will mark annotations provided
+xticks: if True, will print x tick labels
+yticks: if True, will print y tick labels
+annotate: if True, will add beat annotations to the plot
+cyclePath: path to file with cycle annotations; used only if annotate is True
+numDiv: number of divisions to add between each marked cycle; used only if annotate is True
+onsetPath: path to file with onset annotations; only considered if cyclePath is None
+onsetKeyword (str): column name in the onset file to take onsets from
+onsetLabelKeyword (str): column name with labels for the onsets; if None, no label will be printed
+cAnnot: colour to draw annotation lines in; used only if annotate is True
+annotLabel: if True, will print annotation label along with line; used only if annotate is True
+ylim: (min, max) limits for the y axis; if None, will be directly interpreted from the data
+annotAlpha (float): controls opacity of the line drawn</p>
+</dd>
+<dt>Returns</dt><dd><p>ax: plotted axis</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.readCycleAnnotation">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">readCycleAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cyclePath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDiv</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.readCycleAnnotation" title="Permalink to this definition"></a></dt>
+<dd><p>Function to read cycle annotation and add divisions in the middle if required.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cyclePath</strong> -- path to the cycle annotation file</p></li>
+<li><p><strong>numDiv</strong> -- number of equally spaced divisions to add between pairs of annotations (numDiv - 1 timestamps will be added between each pair)</p></li>
+<li><p><strong>startTime</strong> -- start time of audio being analysed</p></li>
+<li><p><strong>duration</strong> -- duration of the audio to be analysed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a numpy array of annotations from the file
+computed: a numpy array of division between annotations</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>provided</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.readOnsetAnnotation">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">readOnsetAnnotation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onsetPath</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['Inst']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.readOnsetAnnotation" title="Permalink to this definition"></a></dt>
+<dd><p>Function to read cycle annotation and add divisions in the middle if required.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>onsetPath</strong> (<em>str</em>) -- path to the cycle annotation file</p></li>
+<li><p><strong>startTime</strong> (<em>float</em>) -- start time of audio being analysed</p></li>
+<li><p><strong>duration</strong> (<em>float</em>) -- duration of the audio to be analysed</p></li>
+<li><p><strong>onsetKeyword</strong> (<em>list</em>) -- list of column names in the onset file to take onsets from</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of numpy arrays of annotations from the file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>provided (list)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="utils_windows.spectrogram">
+<span class="sig-prename descclassname"><span class="pre">utils_windows.</span></span><span class="sig-name descname"><span class="pre">spectrogram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">audio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audioPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startTime</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Blues'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">freqXlabels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">xticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">yticks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cyclePath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numDiv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetPath</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetTimeKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Inst'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">onsetLabelKeyword</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Label'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cAnnot</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'purple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">annotLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Spectrogram'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils_windows.spectrogram" title="Permalink to this definition"></a></dt>
+<dd><p>Plots spectrogram</p>
+<dl class="simple">
+<dt>Parameters</dt><dd><p>audio: loaded audio time series
+sr: sample rate that audio time series is loaded/ is to be loaded in
+audioPath: path to the audio file; only needed if audio is None
+startTime: time to start reading the audio at
+duration: duration of audio
+cmap: colormap to use to plot spectrogram
+ax: axis to plot spectrogram in
+amin: controls the contrast of the spectrogram; passed into librosa.power_to_db function
+freqXlabels: time (in seconds) after which each x label occurs
+xticks: if true, will print x labels
+yticks: if true, will print y labels
+annotate: if True, will annotate either tala or onset markings; if both are provided, tala annotations will be marked
+cyclePath: path to file with tala cycle annotations
+numDiv: number of divisions to put between each tala annotation marking
+onsetPath: path to file with onset annotations; only considered if cyclePath is None
+onsetKeyword (str): column name in the onset file to take onsets from
+onsetLabelKeyword (str): column name with labels for the onsets; if None, no label will be printed
+cAnnot: colour for the annotation marking
+annotLabel: if True, will print annotation label along with line; used only if annotate is True; used only if annotate is True</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, rma.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
