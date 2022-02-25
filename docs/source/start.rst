@@ -61,5 +61,5 @@ Tutorials
 *********
 See below example jupyter notebook files to help you get started:
 
-1. Load audio, compute pitch track, compute spectrogram, plot all (`Notebook https://github.com/rohitma38/rtd-test-code-2/blob/main/example%20notebooks/example-1.ipynb`_)
-2. Load audio, compute onsets, compute tempogram, plot all (`Notebook https://github.com/rohitma38/rtd-test-code-2/blob/main/example%20notebooks/example-tempogram.ipynb`_)
+1. Load audio, compute pitch track, compute spectrogram, plot all (`Notebook <https://github.com/rohitma38/rtd-test-code-2/blob/main/example%20notebooks/example-1.ipynb>`_)
+2. Load audio, compute onsets, compute tempogram, plot all (`Notebook <https://github.com/rohitma38/rtd-test-code-2/blob/main/example%20notebooks/example-tempogram.ipynb>`_)
