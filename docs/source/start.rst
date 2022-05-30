@@ -24,6 +24,10 @@ Install with pip/conda to a new or existing environment. New environment can be 
 
     conda create -n <name-of-environment>
 
+Next, activate the environment using::
+
+    conda activate <name-of-environment>
+
 Then, install the library using(TODO: upload library to pypi/conda-forge)::
 
     pip/conda install <title> 
