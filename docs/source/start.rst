@@ -13,7 +13,7 @@ Download the library from github as a `zip file <https://github.com/pypa/samplep
 
 Next, set up a new virtual environment with the environment file provided in the library to create a new environment with the dependencies installed::
 
-    conda env create –f environment.yml 
+    conda env create -f environment.yml 
     conda activate <title>
 
 **OR**
