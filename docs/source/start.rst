@@ -20,13 +20,13 @@ Next, set up a new virtual environment with the environment file provided in the
 
 With pip/conda
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-Install with pip/conda to a new or existing environment (TODO: upload library to pypi/conda-forge)::
-
-    pip/conda install <title> 
-
-New environment can be created with conda using::
+Install with pip/conda to a new or existing environment. New environment can be created with conda using::
 
     conda create -n <name-of-environment>
+
+Then, install the library using(TODO: upload library to pypi/conda-forge)::
+
+    pip/conda install <title> 
 
 Other optional setup 
 ^^^^^^^^^^^^^^^^^^^^
