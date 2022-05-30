@@ -3,32 +3,30 @@ Getting Started
 
 Installation
 ************
-We recommend installing miniconda from - https://conda.io/projects/conda/en/latest/user-guide/install/index.html if you are new to python. 
- 
+If you are new to python, we recommend first installing miniconda from - https://conda.io/projects/conda/en/latest/user-guide/install/index.html.
 
-Create new virtual environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+From Source
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Download the library from github as a `zip file <https://github.com/pypa/sampleproject/archive/refs/heads/main.zip>`_ and extract to a location of your choice, or clone the library with::
 
-Setup new virtual environment with an environment file that installs dependencies while creating environment::
+    git clone <link-to-library-github-page>
+
+Next, set up a new virtual environment with the environment file provided in the library to create a new environment with the dependencies installed::
 
     conda env create –f environment.yml 
     conda activate <title>
 
 **OR**
 
-Install to existing environment
+With pip/conda
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Install with pip/conda to a new or existing environment (TODO: upload library to pypi/conda-forge)::
 
-Install with pip/conda to an existing/no environment (after uploading our library to pypi/conda-forge)::
+    pip/conda install <title> 
 
-    pip/conda install <title>
+New environment can be created with conda using::
 
-**OR**
-
-From source
-^^^^^^^^^^^
-Download library as zip or clone with ‘git’ and use the functions
- 
+    conda create -n <name-of-environment>
 
 Other optional setup 
 ^^^^^^^^^^^^^^^^^^^^
