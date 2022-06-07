@@ -1,24 +1,16 @@
-from tkinter import E
-import warnings
 from matplotlib import pyplot as plt
 import matplotlib
-from matplotlib.colors import is_color_like, to_rgb
 import pandas as pd
 import numpy as np
 import librosa
 import seaborn as sns
 import scipy.signal as sig
-from librosa.display import waveplot, specshow
-from IPython.display import Audio, Video 
+from librosa.display import waveshow, specshow
+from IPython.display import Audio 
 import parselmouth
 import math
 import soundfile as sf
-import ffmpeg
-import os
-import cv2
-from collections import defaultdict
 import utils_fmp as fmp
-import pdb
 
 #TODO- add audioPath can be None to all docstrings# #Resolved
 #set seaborn theme parameters for plots
@@ -298,7 +290,7 @@ def drawAnnotation(cyclePath=None, onsetPath=None, onsetTimeKeyword=None, onsetL
 
 	# check if ax is None and use current ax if so
 	ax = __check_axes(ax)
-	# pdb.set_trace()
+	
 	if computed is not None:
 		# plot computed annotations, valid only when ``cyclePath`` is not None
 		for ind, computedArray in enumerate(computed):
@@ -428,7 +420,7 @@ def pitchContour(audio=None, sr=16000, audioPath=None, startTime=0, duration=Non
 		audio = librosa.to_mono(audio)
 
 	if duration is None:
-		duration = librosa.get_duration(audio, sr=sr)
+		duration = librosa.get_duration(y=audio, sr=sr)
 
 	snd = parselmouth.Sound(audio, sr)
 	pitch = snd.to_pitch_ac(time_step=timeStep, pitch_floor=minPitch, very_accurate=veryAccurate, octave_jump_cost=octaveJumpCost, pitch_ceiling=maxPitch) 	# extracting pitch contour (in Hz)
@@ -445,11 +437,11 @@ def pitchContour(audio=None, sr=16000, audioPath=None, startTime=0, duration=Non
 		return (p, t)
 	else:
 		# plot the contour
-		return plotPitch(p, t, is_cents=is_cents, ax=ax, **kwargs)
+		return plotPitch(p, t, is_cents=is_cents, ax=ax, xlim=(startTime, startTime+duration), **kwargs)
 
 # Nithya: AskRohit - I have made the default values of xticks and xlabel as False and the defaults of yticks and ylabel as True.
 # PLOTTING FUNCTION
-def plotPitch(p=None, t=None, is_cents=False, notes=None, ax=None, freqXlabels=5, xticks=False, yticks=True, xlabel=False, ylabel=True, title='Pitch Contour', annotate=False, ylim=None, c='blue',**kwargs):
+def plotPitch(p=None, t=None, is_cents=False, notes=None, ax=None, freqXlabels=5, xticks=False, yticks=True, xlabel=False, ylabel=True, title='Pitch Contour', annotate=False, xlim=None, ylim=None, c='blue',**kwargs):
 	'''Plots the pitch contour
 
 	Plots the pitch contour passed in the ``p`` parameter, computed from ``pitchContour()``. 
@@ -521,6 +513,11 @@ def plotPitch(p=None, t=None, is_cents=False, notes=None, ax=None, freqXlabels=5
 		annotate	: bool
 			If True, will add tala-related/onset annotations to the plot .
 
+		xlim	: (float, float) or None
+			(min, max) limits for the x axis
+
+			If None, x limits will be directly interpreted from the data
+
 		ylim	: (float, float) or None
 			(min, max) limits for the y axis.
 			
@@ -552,10 +549,10 @@ def plotPitch(p=None, t=None, is_cents=False, notes=None, ax=None, freqXlabels=5
 	# if ax is None, use the ``plt.gca()`` to use current axes object
 	ax = __check_axes(ax)
 	
-	ax = sns.lineplot(x=t, y=p, ax=ax, color=c)
+	ax.plot(t, p, c=c)
 	ax.set(xlabel='Time (s)' if xlabel else '', 
 	title=title, 
-	xlim=(t[0], t[-1]), 
+	xlim=xlim if xlim is not None else (t[0], t[-1]), 
 	xticks=np.around(np.arange(math.ceil(t[0]), math.floor(t[-1]), freqXlabels)).astype(int),     # start the xticks such that each one corresponds to an integer with xticklabels
 	xticklabels=np.around(np.arange(math.ceil(t[0]), math.floor(t[-1]), freqXlabels)).astype(int) if xticks else []) 	# let the labels start from the integer values.
 
@@ -658,7 +655,7 @@ def spectrogram(audio=None, sr=16000, audioPath=None, startTime=0, duration=None
 	if audio is None:
 		audio, sr = librosa.load(audioPath, sr=sr, mono=True, offset=startTime, duration=duration)
 	if duration is None:
-		duration = librosa.get_duration(audio, sr=sr)
+		duration = librosa.get_duration(y=audio, sr=sr)
 	
 	if nFFT is None:
 		nFFT = int(2**np.ceil(np.log2(winSize)))     # set value of ``nFFT`` if it is None.
@@ -676,7 +673,7 @@ def spectrogram(audio=None, sr=16000, audioPath=None, startTime=0, duration=None
 		return plotSpectrogram(X_dB, t, f, sr=sr, ax=ax, **kwargs)
 
 # PLOTTING FUNCTION
-def plotSpectrogram(X_dB, t, f, sr=16000, hopSize=160, cmap='Blues', ax=None, freqXlabels=5, freqYlabels=2000, xticks=False, yticks=True, xlabel=False, ylabel=True, title='Spectrogram', annotate=True, ylim=None, **kwargs): 
+def plotSpectrogram(X_dB, t, f, sr=16000, hopSize=160, cmap='Blues', ax=None, freqXlabels=5, freqYlabels=2000, xticks=False, yticks=True, xlabel=False, ylabel=True, title='Spectrogram', annotate=True, xlim=None, ylim=None, **kwargs):
 	'''Plots spectrogram
 
 	Uses ``librosa.display.specshow()`` to plot a spectrogram from a computed STFT. Annotations can be added is ``annotate`` is True.
@@ -736,6 +733,11 @@ def plotSpectrogram(X_dB, t, f, sr=16000, hopSize=160, cmap='Blues', ax=None, fr
 	annotate	: bool
 		If True, will annotate markings in either cyclePath or onsetPath with preference to cyclePath.
 
+	xlim	: (float, float) or None
+		(min, max) limits for the x axis
+
+		If None the range is interpreted from the data
+
 	ylim	: (float, float) or None
 		(min, max) limits for the y axis.
 		
@@ -757,7 +759,7 @@ def plotSpectrogram(X_dB, t, f, sr=16000, hopSize=160, cmap='Blues', ax=None, fr
 	ax.set(ylabel='Frequency (Hz)' if ylabel else '', 
 	xlabel='Time (s)' if xlabel else '', 
 	title=title,
-	xlim=(t[0], t[-1]), 
+	xlim=xlim if xlim is not None else (t[0], t[-1]), 
 	xticks=np.around(np.arange(math.ceil(t[0]), math.floor(t[-1]), freqXlabels)).astype(int),     # start the xticks such that each one corresponds to an integer with xticklabels
 	xticklabels=np.around(np.arange(math.ceil(t[0]), math.floor(t[-1]), freqXlabels)).astype(int) if xticks else [], 	# let the labels start from the integer values.
 	ylim=ylim,
@@ -805,7 +807,7 @@ def drawWave(audio=None, sr=16000, audioPath=None, startTime=0, duration=None, a
 				- If ``audio`` is None and ``audioPath`` is not None, the entire song is loaded.
 
 		ax	: matplotlib.axes.Axes or None
-			Axes to plot waveplot in.
+			Axes to plot waveshow in.
 
 			If None, will plot the object in ``plt.gca()``
 
@@ -879,9 +881,9 @@ def drawWave(audio=None, sr=16000, audioPath=None, startTime=0, duration=None, a
 	if audio is None:
 		audio, sr = librosa.load(audioPath, sr=sr, offset=startTime, duration=duration)
 	if duration is None:
-		duration = librosa.get_duration(audio, sr=sr)
+		duration = librosa.get_duration(y=audio, sr=sr)
 	
-	waveplot(audio, sr, ax=ax)
+	waveshow(y=audio, sr=sr, ax=ax, offset=startTime)
 
 	if odf:
 		plotODF(audio=audio, sr=sr, startTime=0, duration=None, ax=ax, winSize_odf=winSize_odf, hopSize_odf=hopSize_odf, nFFT_odf=nFFT_odf, source_odf=source_odf, cOdf=cOdf, ylim=True) 	# startTime=0 and duration=None because audio is already loaded.
@@ -893,8 +895,8 @@ def drawWave(audio=None, sr=16000, audioPath=None, startTime=0, duration=None, a
 
 	ax.set(xlabel='' if not xlabel else 'Time (s)', 
 	ylabel = '' if not ylabel else 'Amplitude',
-	xlim=(0, duration), 
-	xticks=[] if not xticks else np.around(np.arange(math.ceil(startTime) - startTime, duration, freqXlabels)),
+	xlim=(startTime, startTime+duration), 
+	xticks=[] if not xticks else np.around(np.arange(math.ceil(startTime),startTime + duration, freqXlabels)),
 	xticklabels=[] if not xticks else np.around(np.arange(math.ceil(startTime), duration+startTime, freqXlabels)).astype(int),
 	yticks=[] if not yticks else np.around(np.linspace(min(audio), max(audio), 3), 1), 
 	yticklabels=[] if not yticks else np.around(np.linspace(min(audio), max(audio), 3), 1), 
@@ -949,7 +951,7 @@ def plotODF(audio=None, sr=16000, audioPath=None, odf=None, startTime=0, duratio
 				- If ``audio`` is None and ``audioPath`` is not None, the entire song is loaded.
 
 		ax	: matplotlib.axes.Axes
-			Axes object to plot waveplot in.
+			Axes object to plot waveshow in.
 
 		winSize_odf    : int
 			Window size (in frames) used by the onset detection function.
@@ -1023,7 +1025,7 @@ def plotODF(audio=None, sr=16000, audioPath=None, odf=None, startTime=0, duratio
 		if audio is None:
 			audio, sr = librosa.load(audioPath, sr=sr, offset=startTime, duration=duration)
 		if duration is None:
-			duration = librosa.get_duration(audio, sr=sr)
+			duration = librosa.get_duration(y=audio, sr=sr)
 		
 		odf_vals, _ = getODF(audio=audio, audioPath=None, startTime=startTime, duration=duration, fs=sr, winSize=winSize_odf, hopSize=hopSize_odf, nFFT=nFFT_odf, source=source_odf)
 
@@ -1055,7 +1057,7 @@ def plotODF(audio=None, sr=16000, audioPath=None, odf=None, startTime=0, duratio
 		# set ax parameters only if they are not None
 		ax.set(xlabel=xlabel_ if not xlabel else 'Time (s)', 
 		ylabel = ylabel_ if not ylabel else 'ODF',
-		xlim=(0, duration), 
+		xlim=(startTime, startTime+duration),  
 		xticks=xticks_ if not xticks else np.around(np.arange(math.ceil(startTime), duration+startTime, freqXlabels)),
 		xticklabels=xticklabels_ if not xticks else np.around(np.arange(math.ceil(startTime), duration+startTime, freqXlabels)).astype(int),
 		yticks=yticks_ if not yticks else np.around(np.linspace(-max_abs_val,max_abs_val, 3), 2), #Resolved #TODO-Rohit linspace args edited from min & max(audio)
@@ -1163,7 +1165,7 @@ def playAudioWClicks(audio=None, sr=16000, audioPath=None, startTime=0, duration
 	if audio is None:
 		audio, sr = librosa.load(audioPath, sr=None, offset=startTime, duration=duration)
 	if duration is None:
-		duration = librosa.get_duration(audio)
+		duration = librosa.get_duration(y=audio, sr=sr)
 	onsetFileVals = pd.read_csv(onsetFile)
 	onsetTimes = []
 
@@ -1180,80 +1182,6 @@ def playAudioWClicks(audio=None, sr=16000, audioPath=None, startTime=0, duration
 		# write the audio
 		sf.write(destPath, audioWClicks, sr)
 	return Audio(audioWClicks, rate=sr)
-
-# AUDIO MANIPULATION
-def playVideo(video=None, videoPath=None, startTime=0, duration=None, destPath='Data/Temp/VideoPart.mp4', videoOffset=0):
-	'''Plays relevant part of a given video.
-
-	If ``duration`` is None and ``startTime`` is 0, the entire Video is returned. 
-	
-	If ``duration`` is not None or ``startTime`` is not 0, the video is cut using the ``ffmpeg`` Python library and is stored in ``destPath``. 
-
-	Parameters
-	----------
-		video	: ndarray or None
-			Loaded video sample. 
-
-			When ``video`` is not None, all the other parameters in the function are not considered. If a trimmed video is needed, please use ``videoPath`` instead.
-
-			If None, ``videoPath`` will be used to load the video.
-
-		videoPath	: str
-			Path to video file.
-
-			Passed to ``data`` parameter in ``Video()``.
-
-		startTime	: float
-			Time to start reading the video from. 
-			
-			Used only when ``video`` is None.
-		
-		duration	: float
-			Duration of the video to load.
-
-			Used only when ``video`` is None.
-
-		destPath	: str or None
-			Path to store shortened video.
-
-			Used only when ``video`` is None.
-
-		videoOffset	: float
-			Number of seconds offset between video and audio files. This parameter is useful when the video is present only for an excerpt of the audio file. :: 
-				time in audio + ``videoOffset`` = time in video
-	Returns
-	-------
-		iPython.display.Video 
-			Object that plays the video.
-
-	Raises
-	------
-		ValueError
-			If ``destPath`` is None, when ``startTime`` != 0 or ``duration`` is not None.
-	'''
-	if video is None:
-		if duration is None and startTime == 0:
-			# play the entire video
-			return Video(videoPath, embed=True)
-		else:
-			# store a shortened video in destPath
-			if destPath is None:
-				# if destPath is None, raise an error
-				raise ValueError(f'destPath cannot be None if video is to be trimmed before playing. destPath has invalid type of {type(destPath)}.')
-			vid = ffmpeg.input(videoPath)
-			joined = ffmpeg.concat(
-			vid.video.filter('trim', start=startTime+videoOffset, duration=duration).filter('setpts', 'PTS-STARTPTS'),
-			vid.audio.filter('atrim', start=startTime+videoOffset, duration=duration).filter('asetpts', 'PTS-STARTPTS'),
-			v=1,
-			a=1
-			).node
-			v3 = joined['v']
-			a3 = joined['a']
-			out = ffmpeg.output(v3, a3, destPath).overwrite_output()
-			out.run()
-			return Video(destPath, embed=True)
-	else:
-		return Video(data=video, embed=True)
 
 # PLOTTING FUNCTION
 def generateFig(noRows, figSize=(14, 7), heightRatios=None):
@@ -1310,8 +1238,10 @@ def subBandEner(X,fs,band):
 			STFT of an audio signal x
 		fs  : int or float
 			Sampling rate
-		band    : list or tuple or ndarray
+		band    : list or tuple or ndarray or None
 			Edge frequencies (in Hz) of the sub-band of interest
+
+			If None, returns the full-band energy
 		
 	Returns
 	----------
@@ -1319,12 +1249,15 @@ def subBandEner(X,fs,band):
 			Array with each value representing the magnitude STFT values in a short-time frame squared & summed over the sub-band
 	'''
 
-	#convert band edge frequencies to bin numbers
-	binLow = int(np.ceil(band[0]*X.shape[0]/(fs/2)))
-	binHi = int(np.ceil(band[1]*X.shape[0]/(fs/2)))
-
-	#compute sub-band energy
-	sbe = np.sum(np.abs(X[binLow:binHi])**2, 0)
+	if band is None:
+		# calculate full-band energy if band is None
+		sbe = np.sum(np.abs(X[:])**2, 0)
+	else:
+		#convert band edge frequencies to bin numbers
+		binLow = int(np.ceil(band[0]*X.shape[0]/(fs/2)))
+		binHi = int(np.ceil(band[1]*X.shape[0]/(fs/2)))
+		#compute sub-band energy
+		sbe = np.sum(np.abs(X[binLow:binHi])**2, 0)
 
 	return sbe
 
@@ -1354,7 +1287,7 @@ def biphasicDerivative(x, hopDur, norm=True, rectify=True):
 	#sampling instants
 	n = np.arange(-0.1, 0.1, hopDur)
 
-	#filter parameters
+	#filter parameters (see [1] for explanation)
 	tau1 = 0.015  # -ve lobe width
 	tau2 = 0.025  # +ve lobe width
 	d1 = 0.02165  # -ve lobe position
@@ -1380,7 +1313,7 @@ def biphasicDerivative(x, hopDur, norm=True, rectify=True):
 	return x
 
 def toDB(x, C):
-	'''Applies logarithmic (base 10) transformation
+	'''Applies logarithmic (base 10) transformation (based on [1])
 	
 	Parameters
 	----------
@@ -1450,7 +1383,7 @@ def getODF(audio=None, audioPath=None, startTime=0, duration=None, fs=16000, win
 	#compute magnitude STFT
 	X,_ = librosa.magphase(librosa.stft(audio, win_length=winSize, hop_length=hopSize, n_fft=nFFT))
 
-	#use sub-band energy -> log transformation -> biphasic filtering, if vocal onset detection
+	#use sub-band energy -> log transformation -> biphasic filtering, if vocal onset detection [1]
 	if source=='vocal':
 		sub_band = [600,2400] #Hz
 		odf = subBandEner(X, fs, sub_band)
@@ -1460,7 +1393,7 @@ def getODF(audio=None, audioPath=None, startTime=0, duration=None, fs=16000, win
 		#get onset locations using librosa's peak-picking function
 		onsets = librosa.onset.onset_detect(onset_envelope=odf.copy(), sr=fs, hop_length=hopSize, pre_max=4, post_max=4, pre_avg=6, post_avg=6, wait=50, delta=0.12)*hopSize/fs
 
-	#use spectral flux method (from FMP notebooks)
+	#use spectral flux method (from FMP notebooks [2])
 	elif source=='perc':
 		sub_band = [0,fs/2] #full band
 		odf = fmp.spectral_flux(audio, Fs=fs, N=nFFT, W=winSize, H=hopSize, M=20, band=sub_band)
@@ -1579,10 +1512,8 @@ def subsequences(x, winSize, hopSize):
 
 def tempoPeriodLikelihood(ACF, norm=True):
 	'''
-	Compute from ACF, the likelihood of each ACF lag being the time-period of the tempo. Likelihood is obtained by taking a dot product between the ACF vector and a comb-filter in each time frame (see [#]_ for details).
+	Compute from ACF, the likelihood of each ACF lag being the time-period of the tempo. Likelihood is obtained by taking a dot product between the ACF vector and a comb-filter (see [3] for details) in each time frame.
 	
-	.. [#] T.P. Vinutha, S. Suryanarayana, K. K. Ganguli and P. Rao " Structural segmentation and visualization of Sitar and Sarod concert audio ", Proc. of the 17th International Society for Music Information Retrieval Conference (ISMIR), Aug 2016, New York, USA
-
 	Parameters
 	----------
 		ACF : ndarray
@@ -1613,10 +1544,7 @@ def tempoPeriodLikelihood(ACF, norm=True):
 
 def viterbiSmoothing(tempoPeriodLikelihood, hopDur, transitionPenalty, tempoRange=(30,100)):
 	'''
-	Apply viterbi smoothing on tempo period (lag) likelihood values to find optimum sequence of tempo values across audio frames (based on [#]_).
-	
-	.. [#] T.P. Vinutha, S. Suryanarayana, K. K. Ganguli and P. Rao " Structural segmentation and visualization of Sitar and Sarod concert audio ", Proc. of the 17th International Society for Music Information Retrieval Conference (ISMIR), Aug 2016, New York, USA
-
+	Apply viterbi smoothing on tempo period (lag) likelihood values to find optimum sequence of tempo values across audio frames (based on [3]).
 	
 	Parameters
 	----------
@@ -1743,6 +1671,10 @@ def intensityContour(audio=None, sr=16000, audioPath=None, startTime=0, duration
 	if audio is None:
 		# if audio is not given, load audio from audioPath
 		audio, sr = librosa.load(audioPath, sr=sr, mono=True, offset=startTime, duration = duration)
+
+	if duration is None:
+		duration = librosa.get_duration(y=audio, sr=sr)
+
 	snd = parselmouth.Sound(audio, sr)
 	intensity = snd.to_intensity(time_step=timeStep, minimum_pitch=minPitch)
 	intensityVals = intensity.values[0]
@@ -1753,10 +1685,10 @@ def intensityContour(audio=None, sr=16000, audioPath=None, startTime=0, duration
 		return (intensityVals, t)
 	else:
 		# else plot the contour
-		return plotIntensity(intensityVals=intensityVals, t=t, ax=ax, startTime=startTime, duration=duration, **kwargs)
+		return plotIntensity(intensityVals=intensityVals, t=t, ax=ax, startTime=startTime, duration=duration, xlim=(startTime, startTime+duration), **kwargs)
 
 # PLOTTING FUNCTION
-def plotIntensity(intensityVals=None, t=None, ax=None, startTime=0, duration=None, freqXlabels=5, xticks=False, yticks=True, xlabel=False, ylabel=True, title='Intensity Contour', annotate=False, ylim=None, c='yellow', **kwargs):
+def plotIntensity(intensityVals=None, t=None, ax=None, freqXlabels=5, xticks=False, yticks=True, xlabel=False, ylabel=True, title='Intensity Contour', annotate=False, xlim=None, ylim=None, c='yellow', **kwargs):
 	'''Function to plot a computed intensity contour from ``intensityContour()`` function. 
 
 	Parameters
@@ -1772,18 +1704,6 @@ def plotIntensity(intensityVals=None, t=None, ax=None, startTime=0, duration=Non
 
 			If None, will plot in ``matplotlib.pyplot.gca()``.
 
-		startTime    : float >= 0
-			Offset time (in seconds) from where audio is analysed.
-
-			Sent to ``drawAnnotation()``.
-
-		duration    : float >= 0 or None
-			Duration of audio in the plot.
-
-			If None, will consider the entire audio.
-
-			Sent to ``drawAnnotation()``.
-
 		freqXlabels    : int
 			Time (in seconds) after which each x ticklabel should occur
 
@@ -1791,6 +1711,11 @@ def plotIntensity(intensityVals=None, t=None, ax=None, startTime=0, duration=Non
 			If true will mark annotations provided in the plot.
 
 			Send to ``drawAnnotation()``.
+
+		xlim	: (float, float) or None
+			(min, max) limits for the x axis
+
+			If None, will be directly interpreted from the data.
 
 		ylim    : (float, float) or None
 			(min, max) limits for the y axis.
@@ -1819,342 +1744,196 @@ def plotIntensity(intensityVals=None, t=None, ax=None, startTime=0, duration=Non
 	# check if ax is None
 	ax = __check_axes(ax)
 	
-	ax = sns.lineplot(x=t, y=intensityVals, ax=ax, color=c);
+	ax.plot(t, intensityVals, c=c)
 	ax.set(xlabel='Time (s)' if xlabel else '', 
 	ylabel='Intensity (dB)' if ylabel else '', 
 	title=title, 
-	xlim=(startTime, duration+startTime), 
-	xticks=np.around(np.arange(math.ceil(startTime), math.floor(startTime+duration), freqXlabels)).astype(int),     # start the xticks such that each one corresponds to an integer with xticklabels
-	xticklabels=np.around(np.arange(math.ceil(startTime), math.floor(startTime+duration), freqXlabels)).astype(int) if xticks else [], 	# let the labels start from the integer values.
+	xlim=xlim if xlim is not None else (t[0], t[-1]), 
+	xticks=np.around(np.arange(math.ceil(t[0]), math.floor(t[-1]), freqXlabels)).astype(int),     # start the xticks such that each one corresponds to an integer with xticklabels
+	xticklabels=np.around(np.arange(math.ceil(t[0]), math.floor(t[-1]), freqXlabels)).astype(int) if xticks else [], 	# let the labels start from the integer values.
 	ylim=ylim if ylim is not None else ax.get_ylim())
 	if not yticks:
 		ax.set(yticklabels=[])
 	if annotate:
-		ax = drawAnnotation(startTime=startTime, duration=duration, ax=ax, **kwargs)
+		ax = drawAnnotation(startTime=t[0], duration=t[-1]-t[0], ax=ax, **kwargs)
 	return ax
 
-# PLOTTING FUNCTION
-def plot_hand(annotationFile=None, startTime=0, duration=None, vidFps=25, ax=None, freqXlabels=5, xticks=False, yticks=False, xlabel=False, ylabel=True, title='Wrist Position Vs. Time', vidOffset=0, lWristCol='LWrist', rWristCol='RWrist', wristAxis='y', annotate=False, ylim=None, **kwargs):
-	'''Function to plot hand movement.
+def energyContour(audio=None, sr=16000, audioPath=None, startTime=0, duration=None, winSize=640, hopSize=160, timeStep=None, nFFT=1024, subBand=[600, 2400], ax=None, **kwargs):
+	'''
+	Generates a full-band or sub-band energy contour.
 
-	Using Openpose annotations, this function plots the height of each hand's wrist vs time. 
+	If ``ax`` is None, this function returns a plot of the energy contour, else returns (energy, time) values.
 
-	If ``ax`` is None, this will on ``plt.gca()``, i.e. the current axes being used
-	
 	Parameters
 	----------
-		annotationFile    : str
-			File path to Openpose annotations.
+		audio	: ndarray or None
+			Loaded audio time series
 
-		startTime    : float
-			Start time for x labels in the plot (time stamp with respect to the audio signal).
+		sr	: number > 0; default=16000
+			If audio is not None, defines sample rate of audio time series 
 
-		duration    : float
-			Duration of audio to consider for the plot.
+			If audio is None and audioPath is not None, defines sample rate to load the audio at
+
+		audioPath	: str, int, pathlib.Path, file-like object or None
+        	Path to the input file.
+
+			Used only if audio is None. Audio is loaded as mono.
+
+			Sent to ``librosa.load()`` as ``path`` parameter.
+
+			If None, ``audio`` cannot be None.
+
+		startTime    : float; default=0
+			Time stamp to consider audio from
+
+		duration    : float or None; default=None
+			If duration is None
+				- If ``audio`` is None, duration is inferred from the audio.
+				- If ``audio`` is None and ``audioPath`` is not None, the entire song is loaded.
+
+		winSize	: int; default=640
+			Length of window (in frames) used for STFT.
+
+		hopSize	: int or None, default=160
+			Length of hop (in frames) used for STFT. 
 			
-		vidFps    : float
-			FPS of the video data used in openpose annotation.
+			If None, will use the value in ``time_step``.
 
-		ax    : matplotlib.axes.Axes or None 
-		Axes object on which plot is to be plotted.
+		timeStep	: float or None
+			Length of the hop (in seconds) used for STFT. Used only if ``hopSize`` is None.
 
-		If None, uses the current Axes object in use with ``plt.gca()``. 
+		nFFT	: int; default=1024
+			DFT size (in frames)
 
-		freqXlabels    : int > 0 
-			Time (in seconds) after which each x ticklabel occurs
+		subBand	:  list or tuple or ndarray or None
+            Edge frequencies (in Hz) of the sub-band of interest
 
-		xticks    : bool
-			If True, will add xticklabels to plot.
+			If None, considers the full-band energy
 
-		yticks    : bool
-			If True, will add yticklabels to plot.
+		ax    : matplotlib.axes.Axes or None
+			Axes object to plot the intensity contour in.
 
-		xlabel    : bool
-			If True, will print xlabel in the plot.
+			If None, will return a tuple with (intensity contour, time steps)
 
-		ylabel    : bool
-			If True will print ylabel in the plot.
+		kwargs	: Additional arguements passed to ``plotEnergy()``.
 
-		title    : str
+	Returns
+	-------
+		ax : matplotlib.axes.Axes
+			Plot of energy contour if ``ax`` was not None
+
+		(e, t)    : (ndarray, ndarray)
+			Tuple with arrays of energy values (in dB) and time stamps. Returned if ax was None.
+	'''
+
+	if audio is None:
+		# if audio is not given, load audio from audioPath
+		audio, sr = librosa.load(audioPath, sr=sr, mono=True, offset=startTime, duration = duration)
+
+	if duration is None:
+		duration = librosa.get_duration(y=audio, sr=sr)
+	if hopSize is None:
+		# if hopSize is None, use the timeStep value
+		if timeStep is None:
+			raise ValueError('Both hopSize and timeStep cannot be None')
+		else:
+			hopSize = int(timeStep*sr)
+
+	X,_ = librosa.magphase(librosa.stft(audio, win_length=winSize, hop_length=hopSize, n_fft=nFFT))
+	e = subBandEner(X, sr, subBand)
+	e = toDB(e, 100)
+
+	t = np.arange(startTime, np.around(X.shape[1]*hopSize/sr, 2), np.around(hopSize/sr, 2))
+	if ax is None:
+		return (e, t)
+	else:
+		return plotEnergy(e, t, ax=ax, xlim=(startTime, startTime+duration),**kwargs)
+
+def plotEnergy(e, t, ax=None, freqXlabels=5, annotate=False, xticks=False,  c='black', xlabel=True, ylabel=True, xlim=None, ylim=None, title='Energy Contour', **kwargs):
+	'''
+	Used to plot energy contour generated from ``energyContour()``.
+
+	Parameters
+	----------
+		e	: ndarray
+			Energy values (in dB).
+
+			Computed from ``energyContour()``
+
+		t	: ndarray or None
+			Time stamps (in seconds) corresponding to each value in ``e``.
+
+			If None, assumes time starts from 0 s with 0.01 s hops for each value in ``e``.
+
+			Computed from ``energyContour()``.
+
+		ax	: matplotlib.axes.Axes or None
+			Object on which pitch contour is to be plotted
+
+			If None, will plot in ``matplotlib.pyplot.gca()``.
+
+		freqXlabels	: int
+			Time (in seconds) after which each x ticklabel should occur
+
+		xticks	: bool
+			If True, will print x ticklabels in the plot.
+
+		xlabel	: bool
+			If True, will add label to x axis.
+
+		ylabel	: bool
+			If True, will add label to y axis.
+
+		xlim	: (float, float) or None
+			(min, max) values of the x axis
+
+			If None, will determine the x limits from the data.
+
+		ylim	: (float, float) or None
+			(min, max) values of the x axis
+
+			If None, will determine the y limits from the data.
+
+		title	: str
 			Title to add to the plot.
 
-		videoOffset    : float
-			Number of seconds offset between video and audio ::
-				time in audio + videioOffset = time in video
+		annotate	: bool
+			If True, will add tala-related/onset annotations to the plot .
 
-		lWristCol    : str
-			Name of the column with left wrist data in ``annotationFile``.
+		c	: color
+			Colour of the pitch contour plotted.
 
-		rWristCol    : str
-			Name of the column with right wrist data in ``annotationFile``.
+		kwargs	: additional arguements passed to ``drawAnnotation()`` if ``annotate`` is True.
 
-		wristAxis    : str
-			Level 2 header in the ``annotationFile`` denoting axis along which movement is plotted (x, y or z axes).
-
-		annotate    : bool
-			If True will mark annotations provided on the plot.
-
-		ylim    : (float, float) or None
-			(min, max) limits for the y axis.
-			
-			If None, will be directly interpreted from the data.
-
-		kwargs	: Additional arguements passed to ``drawAnnotation()`` if ``annotate`` is True.
-		
 	Returns
 	-------
-		ax    : matplotlib.axes.Axes
-			Axes object with plot
-
+		ax	: matplotlib.axes.Axes
+			Plot of pitch contour.
 	'''
-	startTime = startTime + vidOffset   # convert startTime from time in audio to time in video. See parameter definition of ``videoOffset`` for more clarity.
-	duration = duration
-	movements = pd.read_csv(annotationFile, header=[0, 1])
-	lWrist = movements[lWristCol][wristAxis].values[startTime*vidFps:int((startTime+duration)*vidFps)]
-	rWrist = movements[rWristCol][wristAxis].values[startTime*vidFps:int((startTime+duration)*vidFps)]
-	xvals = np.linspace(startTime, startTime+duration, vidFps*duration, endpoint=False)
+	if ax is None:
+		Exception('ax parameter has to be provided')
 
-	# if ax is None, use plt.gca()
-	ax = __check_axes(ax)
-	ax.plot(xvals, lWrist, label='Left Wrist')
-	ax.plot(xvals, rWrist, label='Right Wrist')
-	ax.set(xlabel='Time (s)' if xlabel else '', 
-	ylabel='Wrist Position' if ylabel else '', 
-	title=title, 
-	xlim=(startTime, startTime+duration), 
-	xticks=np.around(np.arange(math.ceil(startTime), math.floor(startTime+duration), freqXlabels)).astype(int),     # start the xticks such that each one corresponds to an integer with xticklabels
-	xticklabels=np.around(np.arange(math.ceil(startTime), math.floor(startTime+duration), freqXlabels)).astype(int) if xticks else [], 	# let the labels start from the integer values
-	ylim=ylim if ylim is not None else ax.get_ylim()
+	if t is None:
+		t = np.arange(0, len(e)*0.01, 0.01)
+
+	ax.plot(t, e, c=c)
+	ax.set(
+		xlim=xlim if xlim is not None else (t[0], t[-1]), 
+		ylim=ylim if ylim is not None else ax.get_ylim(),
+		xticks=np.around(np.arange(t[0], t[-1], freqXlabels)).astype(int),     # start the xticks such that each one corresponds to an integer with xticklabels
+		xticklabels=np.around(np.arange(t[0], t[-1], freqXlabels)).astype(int) if xticks else [], 	# let the labels start from the integer values
+		xlabel='Time (s)' if xlabel else '',
+		ylabel='dB' if ylabel else '',
+		title=title
 	)
-	if not yticks:
-		ax.set(yticklabels=[])
-	ax.invert_yaxis()    # inverst y-axis to simulate the height of the wrist that we see in real time
-	ax.legend()
+	
 	if annotate:
-		ax = drawAnnotation(startTime=startTime-vidOffset, duration=duration, ax=ax, **kwargs)
+		ax = drawAnnotation(startTime=t[0], duration=t[-1] - t[0], ax=ax, **kwargs)
 	return ax
 
-# ANNOTATION FUNCTION
-def annotateInteraction(axs, keywords, cs, interactionFile, startTime, duration):
-	'''Adds interaction annotation to the axes given. 
-
-	Used in fig 3.
-
-	Parameters
-	----------
-		axs    : list of matplotlib.axes.Axes objects
-			List of objects to add annotation to.
-
-		keywords    : list
-			Keyword corresponding to each Axes object. Value appearing in the 'Type' column in ``interactionFile``. 
-			
-			.. note ::
-				If len(keywords) = len(axs) + 1, the last keyword is plotted in all Axes objects passed.
-
-		cs    : list 
-			List of colours associated with each keyword.
-
-		interactionFile    : str
-			Path to csv file with the annotation of the interactions.
-
-		startTime    : float >= 0
-			Time to start reading the audio at.
-
-		duration    : float >= 0 
-			Length of audio to consider.
-
-	Returns
-	-------
-		axs    : matplotlib.axes.Axes
-			List of axes with annotation of interaction
-	'''
-
-	annotations = pd.read_csv(interactionFile, header=None)
-	annotations.columns = ['Type', 'Start Time', 'End Time', 'Duration', 'Label']
-	annotations = annotations.loc[((annotations['Start Time'] >= startTime) & (annotations['Start Time'] <= startTime+duration)) &
-								((annotations['End Time'] >= startTime) & (annotations['End Time'] <= startTime+duration))
-								]
-	for i, keyword in enumerate(keywords):
-		lims = axs[i].get_ylim()
-		if i < len(axs):
-			# keyword corresponds to a particular axis
-			for j, annotation in annotations.loc[annotations['Type'] == keyword].iterrows():
-				lims = axs[i].get_ylim()
-				axs[i].annotate('', xy=(annotation['Start Time'], 0.25*(lims[1] - lims[0]) + lims[0]), xytext=(annotation['End Time'], 0.25*(lims[1] - lims[0]) + lims[0]), arrowprops={'headlength': 0.4, 'headwidth': 0.2, 'width': 3, 'ec': cs[i], 'fc': cs[i]})
-				axs[i].annotate(annotation['Label'], (annotation['Start Time'] +annotation['Duration']/2, 0.3*(lims[1] - lims[0]) + lims[0]), ha='center')
-		else:
-			# keyword corresponds to all axes
-			for ax in axs:
-				for _, annotation in annotations.loc[annotations['Type'] == keyword].iterrows():
-					for j, annotation in annotations.loc[annotations['Type'] == keyword].iterrows():
-						ax.annotate('', xy=(annotation['Start Time'], 0.75*(lims[1] - lims[0]) + lims[0]), xytext=(annotation['End Time'], 0.75*(lims[1] - lims[0]) + lims[0]), arrowprops={'headlength': 0.4, 'headwidth': 0.2, 'width': 3, 'ec':cs[i], 'fc': cs[i]})
-						ax.annotate(annotation['Label'], (annotation['Start Time'] + annotation['Duration']/2, 0.8*(lims[1] - lims[0]) + lims[0]), ha='center')  
-	return axs
-
-def drawHandTap(ax, handTaps, c='purple'):
-	'''Plots the hand taps as vertical lines on the Axes object ``ax``. 
-	
-	Used in fig 9.
-	
-	Parameters
-	----------
-		ax    : matplotlib.axes.Axes or None
-			Axes object to add hand taps to
-
-			If None, will plot on ``plt.gca()``.
-
-		handTaps    : ndarray
-			Array of hand tap timestamps.
-
-		c    : color
-			Color of the line
-
-			Passed to ``plt.axes.Axes.axvline()``.
-
-	Returns
-	-------
-		matplotlib.axes.Axes
-			Plot with lines
-	'''
-	for handTap in handTaps:
-		ax.axvline(handTap, linestyle='--', c=c, alpha=0.6)
-	return ax
-
-# AUDIO MANIPULATION
-def generateVideoWSquares(vid_path, tapInfo, dest_path='Data/Temp/vidWSquares.mp4', vid_size=(720, 576)):
-	'''Function to genrate a video with rectangles for each hand tap. 
-	
-	Used in fig 9.
-	
-	Parameters
-	----------
-		vid_path    : str
-			Path to the original video file.
-
-		tapInfo    : list
-			List of metadata associated with each handtap.
-			
-			Metadata for each handtap consists of: 
-				- time    : float
-					time stamp of hand tap (in seconds).
-				- keyword    : str    
-					keyword specifying which hand tap to consider
-				- (pos1, pos2)    : ((float, float), (float, float))
-					(x, y) coordinates of opposite corners of the box to be drawn.
-				- color    : (int, int, int) or color
-					If (int, int, int) then it is a tuple with RGB values associated with the colour.
-
-		dest_path    : str
-			File path to save video with squares.
-
-		vid_size    : (int, int)
-			(width, height) of video to generate in pixels
-	
-	Returns
-	-------
-		None
-	'''
-
-	cap_vid = cv2.VideoCapture(vid_path)
-	fps = cap_vid.get(cv2.CAP_PROP_FPS)
-	framesToDraw = defaultdict(list)   # dictionary with frame numbers as keys and properties of square box to draw as list of values
-	for ind, timeRow in enumerate(tapInfo):
-		if is_color_like(timeRow[3]):
-			# pdb.set_trace()
-			tapInfo[ind][3] = [int(x*255) for x in list(to_rgb(timeRow[3]))]
-		# converts data from RGB to BGR
-		tapInfo[ind][3] = tuple([int(x) for x in timeRow[3]][::-1])
-		framesToDraw[int(np.around(timeRow[0]*fps))] = timeRow[1:]
-	output = cv2.VideoWriter(dest_path, cv2.VideoWriter_fourcc(*"XVID"), fps, vid_size)
-	i = 0
-	# generate video
-	while(cap_vid.isOpened()):
-		ret, frame = cap_vid.read()
-		if ret == True:
-			i+=1
-			if i in framesToDraw.keys():
-				frame = cv2.rectangle(frame, framesToDraw[i][1][0], framesToDraw[i][1][1], framesToDraw[i][2], 3)
-			output.write(frame)
-		else:
-			# all frames are read
-			break
-	cap_vid.release()
-	output.release()
-
-def combineAudioVideo(vid_path='Data/Temp/vidWSquares.mp4', audio_path='audioWClicks.wav', dest_path='Data/Temp/FinalVid.mp4'):
-	'''Function to combine audio and video into a single file. 
-	
-	Used in fig 9.
-
-	Parameters
-	----------
-		vid_path    : str
-			File path to the video file with squares.
-		
-		audio_path    : str
-			File path to the audio file with clicks.
-
-		dest_path    : str
-			File path to store the combined file at.
-
-	Returns
-	-------
-		None
-
-	'''
-	
-	vid_file = ffmpeg.input(vid_path)
-	audio_file = ffmpeg.input(audio_path)
-	(
-		ffmpeg
-		.concat(vid_file.video, audio_file.audio, v=1, a=1)
-		.output(dest_path)
-		.overwrite_output()
-		.run()
-	)
-	print('Video saved at ' + dest_path)
-
-def generateVideo(annotationFile, onsetKeywords, vidPath='Data/Temp/VS_Shree_1235_1321.mp4', tempFolder='Data/Temp/', pos=None, cs=None):
-	'''Function to generate video with squares and clicks corresponding to hand taps. 
-	
-	Used in fig 9.
-	
-	Parameters
-	----------
-		annotationFile    : str
-			File path to the annotation file with hand tap timestamps
-
-		onsetKeywords    : list
-			List of column names to read from ``annotationFile``.
-
-		vidPath    : str
-			File path to original video file.
-
-		tempFolder    : str
-			File path to temporary directory to store intermediate audio and video files in.
-
-		pos    : list
-			list of [pos1, pos2] -> 2 opposite corners of the box for each keyword 
-
-		cs    : list
-			list of [R, G, B] colours used for each keyword
-	
-	Returns
-	-------
-		None
-	'''
-	annotations = pd.read_csv(annotationFile)
-	timeStamps = []
-	for i, keyword in enumerate(onsetKeywords):
-		for timeVal in annotations[keyword].values[~np.isnan(annotations[keyword].values)]:
-			timeStamps.append([timeVal, keyword, pos[i], cs[i]])
-	timeStamps.sort(key=lambda x: x[0])
-
-	# generate video 
-	generateVideoWSquares(vid_path=vidPath, tapInfo=timeStamps, dest_path=os.path.join(tempFolder, 'vidWSquares.mp4'))
-
-	# generate audio
-	playAudioWClicks(audioPath=vidPath, onsetFile=annotationFile, onsetLabels=onsetKeywords, destPath=os.path.join(tempFolder, 'audioWClicks.wav'))
-
-	# combine audio and video
-	combineAudioVideo(vid_path=os.path.join(tempFolder, 'vidWSquares.mp4'), audio_path=os.path.join(tempFolder, 'audioWClicks.wav'), dest_path=os.path.join(tempFolder, 'finalVid.mp4'))
+'''
+References
+[1] Rao, P., Vinutha, T.P. and Rohit, M.A., 2020. Structural Segmentation of Alap in Dhrupad Vocal Concerts. Transactions of the International Society for Music Information Retrieval, 3(1), pp.137–152. DOI: http://doi.org/10.5334/tismir.64
+[2] Meinard Müller and Frank Zalkow: FMP Notebooks: Educational Material for Teaching and Learning Fundamentals of Music Processing. Proceedings of the International Conference on Music Information Retrieval (ISMIR), Delft, The Netherlands, 2019.
+[3] T.P. Vinutha, S. Suryanarayana, K. K. Ganguli and P. Rao " Structural segmentation and visualization of Sitar and Sarod concert audio ", Proc. of the 17th International Society for Music Information Retrieval Conference (ISMIR), Aug 2016, New York, USA
+'''
